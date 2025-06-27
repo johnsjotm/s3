@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Usage: ./create_folder <bucket-name> <folder-name>
+
+BUCKET_NAME="$1"
+FOLDER_NAME="$2"
+
+if [[ -z "$BUCKET_NAME" || -z "$FOLDER_NAME" ]]; then
+    echo "Usage: $0 <bucket-name> <folder-name>"
+    exit 1
+fi
+
+aws s3api put-object --bucket "$BUCKET_NAME" --key "${FOLDER_NAME}/"

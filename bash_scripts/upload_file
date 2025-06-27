@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Usage: ./upload_file <file_path> <bucket_name> [s3_key]
+# Example: ./upload_file myfile.txt my-bucket-name [optional/path/in/bucket/myfile.txt]
+
+FILE_PATH="$1"
+BUCKET_NAME="$2"
+S3_KEY="$3"
+
+if [[ -z "$FILE_PATH" || -z "$BUCKET_NAME" ]]; then
+    echo "Usage: $0 <file_path> <bucket_name> [s3_key]"
+    exit 1
+fi
+
+if [[ -z "$S3_KEY" ]]; then
+    S3_KEY=$(basename "$FILE_PATH")
+fi
+
+aws s3 cp "$FILE_PATH" "s3://$BUCKET_NAME/$S3_KEY"
+
+if [[ $? -eq 0 ]]; then
+    echo "File uploaded successfully to s3://$BUCKET_NAME/$S3_KEY"
+else
+    echo "File upload failed."
+    exit 2
+fi
